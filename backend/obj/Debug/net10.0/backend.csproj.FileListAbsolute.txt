@@ -147,3 +147,4 @@ C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\M
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.pdb
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.genruntimeconfig.cache
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\ref\backend.dll
+C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.sourcelink.json

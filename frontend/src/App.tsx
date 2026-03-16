@@ -1,120 +1,164 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useEffect, useState } from 'react'
+import type { Book } from './types/Book'
 import './App.css'
 
+const PAGE_SIZE_OPTIONS = [5, 10, 20]
+
 function App() {
-  const [count, setCount] = useState(0)
+  // Core bits of state the rubric cares about
+  const [books, setBooks] = useState<Book[]>([])
+  const [pageNum, setPageNum] = useState(1)
+  const [pageHowMany, setPageHowMany] = useState(5)
+  const [totalBooks, setTotalBooks] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  // Options for how the user can sort the list
+  const SORT_OPTIONS = [
+    { label: 'No sort', value: 'none' },
+    { label: 'Title (A–Z)', value: 'asc' },
+    { label: 'Title (Z–A)', value: 'desc' },
+  ] as const
+
+  type SortMode = (typeof SORT_OPTIONS)[number]['value']
+  // Default to whatever order the DB already has, then let the user opt into A–Z / Z–A
+  const [sortMode, setSortMode] = useState<SortMode>('none')
+
+  useEffect(() => {
+    // Whenever paging/sort changes, go ask the API for the latest slice of data
+    const fetchBooks = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        // Only send the sort param when the user has actually chosen a mode
+        const sortParam =
+          sortMode === 'none'
+            ? ''
+            : `&sortTitleAsc=${sortMode === 'asc' ? 'true' : 'false'}`
+        const response = await fetch(
+          `https://localhost:5000/api/Book/AllBooks?pageHowMany=${pageHowMany}&pageNum=${pageNum}${sortParam}`
+        )
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`)
+        }
+        const data = await response.json()
+        setBooks(data.books ?? data.Books)
+        setTotalBooks(data.totalBooks ?? data.TotalBooks)
+      } catch (err: any) {
+        setError(err.message ?? 'Failed to load books')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBooks()
+  }, [pageNum, pageHowMany, sortMode])
+
+  const totalPages = Math.ceil(totalBooks / pageHowMany) || 1
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="container my-4">
+      <h1 className="mb-4 text-center">Bookstore</h1>
+  
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <label className="form-label me-2 mb-0">Books per page:</label>
+          <select
+            className="form-select d-inline-block w-auto"
+            value={pageHowMany}
+            onChange={(e) => {
+              setPageNum(1)
+              setPageHowMany(Number(e.target.value))
+            }}
+          >
+            {PAGE_SIZE_OPTIONS.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+          <label className="form-label ms-3 me-2 mb-0">Sort:</label>
+          <select
+            className="form-select d-inline-block w-auto"
+            value={sortMode}
+            onChange={(e) => {
+              setPageNum(1)
+              setSortMode(e.target.value as SortMode)
+            }}
+          >
+            {SORT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
+          <span className="text-muted">Total books: {totalBooks}</span>
         </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
+      </div>
+  
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-danger">{error}</p>}
+  
+      {!loading && !error && (
+        <>
+          <table className="table table-striped table-bordered">
+            <thead className="table-light">
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>ISBN</th>
+                <th>Category</th>
+                <th>Pages</th>
+                <th className="text-end">Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {books.map((book) => (
+                <tr key={book.bookID}>
+                  <td>{book.title}</td>
+                  <td>{book.author}</td>
+                  <td>{book.publisher}</td>
+                  <td>{book.isbn}</td>
+                  <td>{book.category}</td>
+                  <td>{book.pageCount}</td>
+                  <td className="text-end">${book.price.toFixed(2)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+  
+          <nav aria-label="Book pagination">
+            <ul className="pagination justify-content-center">
+              <li className={`page-item ${pageNum === 1 ? 'disabled' : ''}`}>
+                <button
+                  className="page-link"
+                  onClick={() => setPageNum((p) => p - 1)}
+                  disabled={pageNum === 1}
                 >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
+                  Previous
+                </button>
+              </li>
+              <li className="page-item disabled">
+                <span className="page-link">
+                  Page {pageNum} of {totalPages}
+                </span>
+              </li>
+              <li className={`page-item ${pageNum === totalPages ? 'disabled' : ''}`}>
+                <button
+                  className="page-link"
+                  onClick={() => setPageNum((p) => p + 1)}
+                  disabled={pageNum === totalPages}
                 >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </>
+      )}
+    </div>
   )
 }
 
