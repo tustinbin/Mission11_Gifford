@@ -140,11 +140,27 @@ function App() {
                   Previous
                 </button>
               </li>
-              <li className="page-item disabled">
-                <span className="page-link">
-                  Page {pageNum} of {totalPages}
-                </span>
-              </li>
+
+              {/* One button per page so I can quickly jump around */}
+              {Array.from({ length: totalPages }, (_, idx) => {
+                const page = idx + 1
+                return (
+                  <li
+                    key={page}
+                    className={`page-item ${pageNum === page ? 'active' : ''}`}
+                    style={{ marginInline: 2 }}
+                  >
+                    <button
+                      className="page-link"
+                      onClick={() => setPageNum(page)}
+                      disabled={pageNum === page}
+                    >
+                      {page}
+                    </button>
+                  </li>
+                )
+              })}
+
               <li className={`page-item ${pageNum === totalPages ? 'disabled' : ''}`}>
                 <button
                   className="page-link"
