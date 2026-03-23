@@ -15,11 +15,23 @@ namespace backend.Controllers
         }
 
         [HttpGet("AllBooks")]
-        // Main endpoint the React app calls to get paged (and optionally sorted) books
-        public IActionResult GetBooks(int pageHowMany = 10, int pageNum = 1, bool? sortTitleAsc = null) {
+        // Main endpoint the React app calls to get paged (and optionally sorted/filtered) books
+        public IActionResult GetBooks(
+            int pageHowMany = 10,
+            int pageNum = 1,
+            bool? sortTitleAsc = null,
+            [FromQuery] List<string>? categories = null)
+        {
 
             // Start with the full books query from EF
             var query = _context.Books.AsQueryable();
+
+            // If the user selected one or more categories, filter down first.
+            // Otherwise, return all books (default behavior).
+            if (categories != null && categories.Any())
+            {
+                query = query.Where(b => categories.Contains(b.Category));
+            }
 
             // If the user asked for sorting, apply it here
             if (sortTitleAsc is true)
@@ -45,5 +57,17 @@ namespace backend.Controllers
             });
         }
 
+        [HttpGet("GetBookCategories")]
+        // Simple endpoint for the React checkbox list (distinct categories from the DB)
+        public IActionResult GetBookCategories()
+        {
+            var categories = _context.Books
+                .Select(b => b.Category)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+
+            return Ok(categories);
+        }
     }
 }
