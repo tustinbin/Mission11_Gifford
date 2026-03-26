@@ -131,6 +131,7 @@ C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\M
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.csproj.CoreCompileInputs.cache
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.sourcelink.json
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
@@ -146,4 +147,3 @@ C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\M
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.pdb
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.genruntimeconfig.cache
 C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\ref\backend.dll
-C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\obj\Debug\net10.0\backend.sourcelink.json

@@ -96,7 +96,7 @@ function BookList() {
     // Load distinct categories once so I can render the checkbox list.
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://localhost:5000/api/Book/GetBookCategories')
+        const response = await fetch('http://localhost:4000/api/Book/GetBookCategories')
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`)
         }
@@ -134,7 +134,7 @@ function BookList() {
           .join('')
 
         const response = await fetch(
-          `https://localhost:5000/api/Book/AllBooks?pageHowMany=${pageHowMany}&pageNum=${pageNum}${sortParam}${categoriesParam}`
+          `http://localhost:4000/api/Book/AllBooks?pageHowMany=${pageHowMany}&pageNum=${pageNum}${sortParam}${categoriesParam}`
         )
 
         if (!response.ok) {
