@@ -3,6 +3,7 @@ import CartSummaryButton from './components/CartSummaryButton/CartSummaryButton'
 import { CartProvider } from './context/CartContext'
 import CartPage from './pages/CartPage'
 import BooksPage from './pages/BooksPage'
+import AdminBooksPage from './pages/AdminBooksPage'
 
 function App() {
   // Keep App.tsx thin: define routes, and let pages/components own UI + state.
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<BooksPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/adminbooks" element={<AdminBooksPage />} />
         </Routes>
       </BrowserRouter>
     </CartProvider>

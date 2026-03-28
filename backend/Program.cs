@@ -27,8 +27,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// Lock CORS down to my React dev origin
-app.UseCors(x => x.WithOrigins("http://localhost:3000"));
+// Lock CORS down to my React dev origin (methods + headers required for POST/PUT/DELETE preflight)
+app.UseCors(x =>
+    x.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
 
 app.UseHttpsRedirection();
 

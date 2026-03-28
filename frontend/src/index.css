@@ -50,9 +50,10 @@
   }
 }
 
+/* Wider than the old 1126px cap (~half the side “bars” on a laptop) while still centered */
 #root {
-  width: 1126px;
-  max-width: 100%;
+  width: 100%;
+  max-width: min(1520px, 95vw);
   margin: 0 auto;
   text-align: center;
   border-inline: 1px solid var(--border);
@@ -60,10 +61,20 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  /* Let wide tables scroll inside .table-responsive instead of stretching past the frame */
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+/* Book list: keep Title from collapsing into a skinny column */
+.booklist-table th:first-child,
+.booklist-table td:first-child {
+  min-width: 12rem;
 }
 
 body {
   margin: 0;
+  overflow-x: hidden;
 }
 
 h1,

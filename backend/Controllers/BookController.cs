@@ -20,7 +20,8 @@ namespace backend.Controllers
             int pageHowMany = 10,
             int pageNum = 1,
             bool? sortTitleAsc = null,
-            [FromQuery] List<string>? categories = null)
+            [FromQuery] List<string>? categories = null,
+            [FromQuery] List<string>? classifications = null)
         {
 
             // Start with the full books query from EF
@@ -31,6 +32,12 @@ namespace backend.Controllers
             if (categories != null && categories.Any())
             {
                 query = query.Where(b => categories.Contains(b.Category));
+            }
+
+            // Optional filter by classification (e.g. Fiction / Non-Fiction)
+            if (classifications != null && classifications.Any())
+            {
+                query = query.Where(b => classifications.Contains(b.Classification));
             }
 
             // If the user asked for sorting, apply it here
@@ -68,6 +75,87 @@ namespace backend.Controllers
                 .ToList();
 
             return Ok(categories);
+        }
+
+        [HttpGet("GetBookClassifications")]
+        public IActionResult GetBookClassifications()
+        {
+            var classifications = _context.Books
+                .Select(b => b.Classification)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToList();
+
+            return Ok(classifications);
+        }
+
+        [HttpPost]
+        public IActionResult CreateBook([FromBody] BookWriteDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var book = new Book
+            {
+                Title = dto.Title,
+                Author = dto.Author,
+                Publisher = dto.Publisher,
+                ISBN = dto.ISBN,
+                Classification = dto.Classification,
+                Category = dto.Category,
+                PageCount = dto.PageCount,
+                Price = dto.Price,
+            };
+
+            _context.Books.Add(book);
+            _context.SaveChanges();
+
+            return Ok(book);
+        }
+
+        [HttpPut("{id:int}")]
+        public IActionResult UpdateBook(int id, [FromBody] BookWriteDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var book = _context.Books.Find(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            book.Title = dto.Title;
+            book.Author = dto.Author;
+            book.Publisher = dto.Publisher;
+            book.ISBN = dto.ISBN;
+            book.Classification = dto.Classification;
+            book.Category = dto.Category;
+            book.PageCount = dto.PageCount;
+            book.Price = dto.Price;
+
+            _context.SaveChanges();
+
+            return Ok(book);
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult DeleteBook(int id)
+        {
+            var book = _context.Books.Find(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            _context.Books.Remove(book);
+            _context.SaveChanges();
+
+            return NoContent();
         }
     }
 }

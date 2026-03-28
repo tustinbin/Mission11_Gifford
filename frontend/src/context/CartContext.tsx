@@ -6,6 +6,8 @@ import type { CartItem } from '../types/CartItem'
 interface CartContextType {
   cartItems: CartItem[]
   addToCart: (book: Book) => void
+  /** When a book is edited (price/title), keep cart line items in sync */
+  syncCartBook: (book: Book) => void
   updateQuantity: (bookID: number, quantity: number) => void
   removeFromCart: (bookID: number) => void
   clearCart: () => void
@@ -38,7 +40,12 @@ function CartProvider({ children }: { children: ReactNode }) {
       if (existing) {
         return prev.map((item) =>
           item.bookID === book.bookID
-            ? { ...item, quantity: item.quantity + 1 }
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+                title: book.title,
+                price: book.price,
+              }
             : item
         )
       }
@@ -53,6 +60,16 @@ function CartProvider({ children }: { children: ReactNode }) {
         },
       ]
     })
+  }
+
+  const syncCartBook = (book: Book) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.bookID === book.bookID
+          ? { ...item, title: book.title, price: book.price }
+          : item
+      )
+    )
   }
 
   const updateQuantity = (bookID: number, quantity: number) => {
@@ -89,6 +106,7 @@ function CartProvider({ children }: { children: ReactNode }) {
       value={{
         cartItems,
         addToCart,
+        syncCartBook,
         updateQuantity,
         removeFromCart,
         clearCart,
