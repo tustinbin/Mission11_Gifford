@@ -1,7 +1,7 @@
 import type { Book } from '../types/Book'
 
 /** Base URL for the ASP.NET API (HTTPS port from launchSettings). */
-const API_URL = 'https://localhost:5000'
+const API_URL = 'https://mission11-gifford-backend10-hwg4cef2hafzftaf.francecentral-01.azurewebsites.net'
 
 export type BooksSortMode = 'none' | 'asc' | 'desc'
 

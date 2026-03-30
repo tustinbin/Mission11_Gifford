@@ -522,3 +522,4 @@ c:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\M
 c:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\_vb\runtimes\win-arm64\native\e_sqlite3.dll
 c:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\_vb\runtimes\win-x64\native\e_sqlite3.dll
 c:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\_vb\runtimes\win-x86\native\e_sqlite3.dll
+C:\Users\William\Documents\.Personal Documents\.Winter 2026\Junior Core\IS 413\Mission11_Gifford\backend\bin\Debug\net10.0\Bookstore.sqlite
