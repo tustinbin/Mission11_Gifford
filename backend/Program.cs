@@ -16,7 +16,13 @@ builder.Services.AddDbContext<BookstoreDbContext>(options =>
 });
 
 // Allow calls from the Vite dev server
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+    options.AddPolicy("AllowReactAppBlah", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000", "https://blue-water-0f7b48e1e.2.azurestaticapps.net")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    }));
 
 var app = builder.Build();
 
@@ -28,8 +34,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Lock CORS down to my React dev origin (methods + headers required for POST/PUT/DELETE preflight)
-app.UseCors(x =>
-    x.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader());
+app.UseCors("AllowReactAppBlah");
 
 app.UseHttpsRedirection();
 
